@@ -17,7 +17,7 @@ print("Total number of rows in test data: ", test_data.shape[0])
 # The result is that 74% of women 18% of men survived
 
 # Cleaning and handling missing values in data sets:
-train_data, test_data = dc.clean_data_sets(train_data, test_data)
+train_data_clean, test_data_clean = dc.clean_data_sets(train_data, test_data)
 
 with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(train_data)
