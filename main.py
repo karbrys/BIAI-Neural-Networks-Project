@@ -36,10 +36,10 @@ normalizer = tf.keras.layers.Normalization(axis=-1)
 normalizer.adapt(train_data_clean)
 
 # Creating model
-model = md.create_model(normalizer)
+model = md.create_model_8(normalizer)
 
 # Fitting model
-model.fit(train_data_clean, target, batch_size=32, verbose=2, epochs=50)
+model.fit(train_data_clean, target, batch_size=32, verbose=2, epochs=50) #combinations also with:batch_size=64 epochs=100
 
 # Model summary
 model.summary()
@@ -51,7 +51,7 @@ print(predict)
 
 # Submission to csv
 result = pd.DataFrame({"Pclass": test_data_clean.Pclass, "Sex": test_data_clean.Sex, "Age": test_data_clean.Age, "Survived": predict})
-result.to_csv("final_result.csv", index=False)
+result.to_csv("final_result_m8.csv", index=False)
 
 
 
