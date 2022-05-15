@@ -6,6 +6,10 @@ from tensorflow import keras
 from tensorflow.python.keras import layers
 import src.data_clean.clean as dc
 import src.model.model as md
+import matplotlib.pyplot as plt
+import stats.histograms as sth
+import seaborn as sns
+from sklearn import metrics
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -24,6 +28,11 @@ print("Total number of rows in test data: ", test_data.shape[0])
 # Cleaning and handling missing values in data sets:
 train_data_clean, test_data_clean = dc.clean_data_sets(train_data, test_data)
 
+# Histograms
+#sth.create_survival_age_histogram(train_data_clean)
+#sth.create_survival_pclass_histogram(train_data_clean)
+#sth.create_correlation(train_data_clean)
+
 # Take out target column - in our case survived column
 target = train_data_clean.pop('Survived')
 
@@ -36,23 +45,35 @@ normalizer = tf.keras.layers.Normalization(axis=-1)
 normalizer.adapt(train_data_clean)
 
 # Creating model
-model = md.create_model_8(normalizer)
+model = md.create_model_6(normalizer)
 
 # Fitting model
-model.fit(train_data_clean, target, batch_size=32, verbose=2, epochs=50) #combinations also with:batch_size=64 epochs=100
+history = model.fit(train_data_clean, target,batch_size=32, verbose=2, epochs=200) #combinations also with:batch_size=64 epochs=100
+
+# Plotting the Loss and Accuracy over 250 epochs
+#pd.DataFrame(history.history).plot(title="Loss and Accuracy")
+#plt.savefig('plot11a.png')
+#plt.show()
 
 # Model summary
 model.summary()
 
 # Prediction for test data
-predict = model.predict(test_data_clean)
+predict = model.predict(train_data_clean)
 predict = (predict > 0.5).astype(int).ravel()
 print(predict)
 
+# Evaluation
+model.evaluate(train_data_clean, target)
+
 # Submission to csv
-result = pd.DataFrame({"Pclass": test_data_clean.Pclass, "Sex": test_data_clean.Sex, "Age": test_data_clean.Age, "Survived": predict})
-result.to_csv("final_result_m8.csv", index=False)
+#result = pd.DataFrame({"Pclass": test_data_clean.Pclass, "Sex": test_data_clean.Sex, "Age": test_data_clean.Age, "Survived": predict})
+#result.to_csv("final_result_m11a.csv", index=False)
 
-
+# Plotting the confusion matrix in heatmap
+matrix = metrics.confusion_matrix(target, predict)
+sns.heatmap(matrix, annot = True,fmt = 'g')
+plt.savefig('confusion6.png')
+plt.show()
 
 

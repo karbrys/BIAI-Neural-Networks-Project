@@ -20,6 +20,7 @@ def create_model(normalizer):
                   metrics=['accuracy'])
     return model
 
+# GOOD
 def create_model2(normalizer):
     # Creating model layers
     model2 = tf.keras.Sequential([
@@ -96,3 +97,49 @@ def create_model_6(normalizer):
                   loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
                   metrics=['accuracy'])
     return model6
+
+def create_model_9(normalizer):
+    # Creating model layers
+    model9 = tf.keras.Sequential([
+            normalizer,
+            tf.keras.layers.Dense(10, activation='tanh'),
+            tf.keras.layers.Dense(10, activation='tanh'),
+            tf.keras.layers.Dense(1)
+        ])
+
+    # Compiling model
+    model9.compile(optimizer='adam',
+                  loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
+    return model9
+
+def create_model_10(normalizer):
+    # Creating model layers
+    model10 = tf.keras.Sequential([
+            normalizer,
+            tf.keras.layers.Dense(10, activation='softplus'),
+            tf.keras.layers.Dense(10, activation='softplus'),
+            tf.keras.layers.Dense(1)
+        ])
+
+    # Compiling model
+    model10.compile(optimizer='adam',
+                  loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
+    return model10
+
+def create_model_11(normalizer):
+    # Creating model layers
+    model = tf.keras.Sequential([
+            normalizer,
+            tf.keras.layers.Dense(12, activation='relu'),
+            tf.keras.layers.Dense(8, activation='relu'),
+            tf.keras.layers.Dense(4, activation='relu'),
+            tf.keras.layers.Dense(1, activation="sigmoid")
+        ])
+
+    # Compiling model
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
+                  loss=tf.keras.losses.BinaryCrossentropy(),
+                  metrics=['accuracy'])
+    return model
